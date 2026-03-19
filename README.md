@@ -38,4 +38,4 @@ This extension includes specialized SOCKS5 and HTTP nodes for South Korea, provi
 ## 📄 License
 This project is for educational and privacy-advocacy purposes. MIT License.
 
-Developed with ❤️ for the Privacy Community.
+Developed with ❤️ Sameer Malik.
