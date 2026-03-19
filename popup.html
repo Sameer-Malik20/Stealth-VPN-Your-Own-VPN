@@ -1,0 +1,305 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --primary: #6366f1;
+      --primary-hover: #4f46e5;
+      --bg: #0f172a;
+      --card: rgba(30, 41, 59, 0.7);
+      --text: #f8fafc;
+      --text-dim: #94a3b8;
+      --success: #10b981;
+      --danger: #ef4444;
+    }
+
+    body {
+      width: 320px;
+      background: var(--bg);
+      color: var(--text);
+      font-family: 'Inter', sans-serif;
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    .container {
+      padding: 24px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 24px;
+    }
+
+    .header {
+      width: 100%;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .logo {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .logo-text {
+      font-weight: 700;
+      font-size: 18px;
+      letter-spacing: -0.5px;
+    }
+
+    .settings-icon {
+      cursor: pointer;
+      color: var(--text-dim);
+      transition: color 0.2s;
+    }
+
+    .settings-icon:hover {
+      color: var(--text);
+    }
+
+    .status-card {
+      width: 100%;
+      background: var(--card);
+      backdrop-filter: blur(12px);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      border-radius: 16px;
+      padding: 16px;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    .status-info {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+
+    .status-label {
+      font-size: 12px;
+      color: var(--text-dim);
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+
+    .status-value {
+      font-size: 14px;
+      font-weight: 600;
+    }
+
+    .status-value.connected {
+      color: var(--success);
+    }
+
+    .status-value.disconnected {
+      color: var(--danger);
+    }
+
+    .power-btn {
+      width: 120px;
+      height: 120px;
+      border-radius: 50%;
+      border: none;
+      background: var(--card);
+      border: 2px solid rgba(255, 255, 255, 0.1);
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+      position: relative;
+    }
+
+    .power-btn::after {
+        content: '';
+        position: absolute;
+        inset: -8px;
+        border-radius: 50%;
+        border: 2px solid var(--primary);
+        opacity: 0.2;
+        transform: scale(0.9);
+        transition: all 0.3s;
+    }
+
+    .power-btn.active {
+      background: var(--primary);
+      box-shadow: 0 0 40px rgba(99, 102, 241, 0.4);
+      border-color: transparent;
+    }
+
+    .power-btn.active::after {
+        opacity: 1;
+        transform: scale(1);
+        animation: pulse 2s infinite;
+    }
+
+    @keyframes pulse {
+        0% { transform: scale(1); opacity: 0.8; }
+        50% { transform: scale(1.15); opacity: 0; }
+        100% { transform: scale(1); opacity: 0; }
+    }
+
+    .power-icon {
+        width: 48px;
+        height: 48px;
+        color: var(--text);
+    }
+
+    .selector-container {
+        width: 100%;
+        display: flex;
+        flex-direction: column;
+        gap: 8px;
+    }
+
+    .custom-select {
+        position: relative;
+        width: 100%;
+    }
+
+    .selected-option {
+        background: var(--card);
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        border-radius: 12px;
+        padding: 12px 16px;
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        font-size: 14px;
+        transition: border-color 0.2s;
+    }
+
+    .selected-option:hover {
+        border-color: rgba(255, 255, 255, 0.2);
+    }
+
+    .options-container {
+        display: none;
+        position: absolute;
+        bottom: 100%;
+        left: 0;
+        right: 0;
+        background: #1e293b;
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        border-radius: 12px;
+        max-height: 200px;
+        overflow-y: auto;
+        z-index: 10;
+        margin-bottom: 8px;
+        box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.3);
+    }
+
+    .options-container.show {
+        display: block;
+    }
+
+    .option {
+        padding: 12px 16px;
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        font-size: 14px;
+        transition: background 0.2s;
+    }
+
+    .option:hover {
+        background: rgba(255, 255, 255, 0.05);
+    }
+
+    .proxy-type {
+        font-size: 10px;
+        font-weight: 700;
+        padding: 2px 6px;
+        border-radius: 4px;
+        background: var(--primary);
+        color: white;
+        text-transform: uppercase;
+    }
+
+    .proxy-type.socks5 { background: #8b5cf6; }
+
+    .footer {
+        width: 100%;
+        text-align: center;
+        font-size: 11px;
+        color: var(--text-dim);
+    }
+
+    .site-domain {
+        font-weight: 600;
+        color: var(--text);
+    }
+
+    /* Scrollbar */
+    ::-webkit-scrollbar { width: 6px; }
+    ::-webkit-scrollbar-track { background: transparent; }
+    ::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.1); border-radius: 3px; }
+    ::-webkit-scrollbar-thumb:hover { background: rgba(255,255,255,0.2); }
+
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="header">
+      <div class="logo">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" style="color: var(--primary);">
+            <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path>
+        </svg>
+        <span class="logo-text">Stealth VPN</span>
+      </div>
+      <div id="openSettings" class="settings-icon">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="12" cy="12" r="3"></circle>
+            <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"></path>
+        </svg>
+      </div>
+    </div>
+
+    <div class="status-card">
+        <div class="status-info">
+            <span class="status-label">Status</span>
+            <span id="statusText" class="status-value disconnected">Disconnected</span>
+        </div>
+        <div class="status-info">
+            <span class="status-label">Current Site</span>
+            <span class="status-value site-domain">None</span>
+        </div>
+    </div>
+
+    <button id="toggleBtn" class="power-btn">
+      <svg class="power-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M18.36 6.64a9 9 0 1 1-12.73 0"></path>
+          <line x1="12" y1="2" x2="12" y2="12"></line>
+      </svg>
+    </button>
+
+    <div class="selector-container">
+        <span class="status-label">Server Selection</span>
+        <div class="custom-select">
+            <div class="selected-option">
+                <span class="proxy-name">Loading servers...</span>
+                <svg width="14" height="14" style="margin-left: auto;" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3">
+                    <path d="M6 9l6 6 6-6"></path>
+                </svg>
+            </div>
+            <div class="options-container"></div>
+        </div>
+    </div>
+
+    <div class="footer">
+        Powered by Stealth Engine (MV3)
+    </div>
+  </div>
+
+  <script src="functions.js"></script>
+  <script src="popup.js"></script>
+</body>
+</html>
